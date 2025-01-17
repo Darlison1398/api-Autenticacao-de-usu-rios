@@ -1,7 +1,7 @@
-###API de Gerenciamento de Usuários###
+#API de Gerenciamento de Usuários
 Esta é uma API desenvolvida com Spring Boot, Spring Security e Auth0, utilizando o banco de dados PostgreSQL. Ela gerencia autenticação, permissões de usuários e recuperação de senha, com funcionalidades específicas para dois tipos de usuários: usuário comum (user) e administrador (admin).
 
-Funcionalidades
+##Funcionalidades
 Autenticação e Autorização
 
 Gerenciamento de usuários com JWT (JSON Web Token) para autenticação.
