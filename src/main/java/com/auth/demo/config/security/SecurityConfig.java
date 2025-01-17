@@ -30,6 +30,8 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/teste").permitAll()
                         .requestMatchers(HttpMethod.POST, "/user/save").permitAll()
                         .requestMatchers(HttpMethod.POST, "/user/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/user/esqueceuSenha").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/user/resetarSenha").permitAll()
                         .requestMatchers(HttpMethod.PUT, "/user/editar/{id}").hasRole("USER")
                         .requestMatchers(HttpMethod.GET, "/user/me").hasRole("USER")
                         .requestMatchers(HttpMethod.POST, "/admin/save").permitAll()

@@ -2,6 +2,7 @@ package com.auth.demo.service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.apache.catalina.mbeans.UserMBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class UserService {
 
     @Autowired
     private TokenService tokenService;
+
+    @Autowired
+    private EmailService emailService;
 
     public UserModel createCountUser(UserModel user) {
         try {
@@ -73,5 +77,47 @@ public class UserService {
         UserDTO userDTO = new UserDTO(user.getNome(), user.getIdade(), user.getBios(), user.getEmail(), user.isStatus(), user.getDataHoraCadastro());
         return userDTO;
     }
+
+    /*public void deletarUsuario(String email, Long id) {
+        UserModel user = userRepository.findByEmail(email)
+        .orElseThrow( () -> new IllegalStateException("Usuário não encontrado"));
+
+        if (!user.getId().equals(id)) {
+            throw new IllegalStateException("Você não pode deletar outro usuário");
+        }
+        userRepository.delete(user);
+    }*/
     
+    public String esqueceuSenha(String email){
+        Optional<UserModel> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isPresent()) {
+            UserModel user = userOptional.get();
+            String token = UUID.randomUUID().toString();
+            user.setResetToken(token);
+            user.setTokenExpiration(LocalDateTime.now().plusHours(1));
+            userRepository.save(user);
+
+            String resetLink = "http://localhost:5173/reset-password?token=" + token;
+            emailService.enviarEmail(user.getEmail(), "Redefinição de Senha", "Clique no link para redefinir sua senha: " + resetLink);
+
+            return "Email de recuperação enviado";
+        }
+        throw new IllegalArgumentException("Email não encontrado");
+    }
+
+    public String resetarSenha(String token, String novaSenha) {
+        Optional<UserModel> userOptional = userRepository.findByResetToken(token);
+
+        if (userOptional.isPresent()) {
+            UserModel user = userOptional.get();
+            if (user.getTokenExpiration().isBefore(LocalDateTime.now())) {
+                throw new IllegalArgumentException("Token expirado");
+            }
+            user.setSenha(SenhaValidation.validarECodificarSenha(user.getSenha()));
+            user.setResetToken(null);
+            user.setTokenExpiration(null);
+            userRepository.save(user);
+        }
+        throw new IllegalStateException("Token inválido. Por favor, solicite uma nova recuperação de senha");
+    }
 }

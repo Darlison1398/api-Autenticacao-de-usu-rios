@@ -1,5 +1,6 @@
 package com.auth.demo.model;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -30,6 +31,12 @@ public class UserModel extends PessoaModel implements UserDetails {
 
     @Column
     private boolean status;
+
+    @Column(name = "reset_token")
+    private String resetToken;
+
+    @Column(name = "token_expiration")
+    private LocalDateTime tokenExpiration;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

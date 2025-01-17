@@ -1,5 +1,7 @@
 package com.auth.demo.controller;
 
+import java.util.Map;
+
 import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -67,5 +69,29 @@ public class UserController {
     public ResponseEntity<?> getCurrentUser() {
         return ResponseEntity.ok(userService.userLogado());
     }
+
+    @PostMapping("/esqueceuSenha")
+    public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> request) {
+        try {
+            String email = request.get("email");
+            String token = userService.esqueceuSenha(email);
+            return ResponseEntity.status(HttpStatus.OK).body("Token enviado para o email: " + email);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao recuperar senha: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/resetarSenha")
+    public ResponseEntity<?> resetPassword(@RequestBody Map<String, String> request){
+        try {
+            String token = request.get("token");
+            String novaSenha = request.get("novaSenha");
+            String response = userService.resetarSenha(token, novaSenha);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    } 
     
 }

@@ -1,0 +1,27 @@
+spring.application.name=demo
+
+server.port=
+
+spring.datasource.url= nomedobanco
+spring.datasource.username= username
+spring.datasource.password= senha
+spring.jpa.hibernate.ddl-auto=update
+#spring.jpa.hibernate.ddl-auto=none
+
+api.security.token.secret=chave_secreta_da_api
+
+# configuração de email
+spring.mail.host=
+spring.mail.port=
+spring.mail.username=
+spring.mail.password=
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.starttls.enable=true
+spring.mail.properties.mail.smtp.starttls.required=true
+spring.mail.properties.mail.smtp.connectiontimeout=5000
+spring.mail.properties.mail.smtp.timeout=5000
+spring.mail.properties.mail.smtp.writetimeout=5000
+
+# para debugar 
+logging.level.org.springframework.security=DEBUG
+
